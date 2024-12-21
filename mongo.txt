@@ -1,0 +1,286 @@
+Microsoft Windows [Version 10.0.22631.4460]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\tmadh>mongosh
+Current Mongosh Log ID: 674bffffddf67167392710bb
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.0
+Using MongoDB:          7.0.12
+Using Mongosh:          2.3.0
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2024-11-26T22:21:57.358+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> show dbs
+admin   40.00 KiB
+config  72.00 KiB
+local   72.00 KiB
+test> db.getName()
+test
+test> const name=Madhan
+ReferenceError: Madhan is not defined
+test> const name ="madhan"
+
+test> const name="Madhan"
+
+test> name
+Madhan
+test> const data={"name":"Madhan",age:19}
+
+test> data
+{ name: 'Madhan', age: 19 }
+test> db.collectionName.insertOne()
+MongoshInvalidInputError: [COMMON-10001] Missing required argument at position 0 (Collection.insertOne)
+test>
+(To exit, press Ctrl+C again or Ctrl+D or type .exit)
+test> db.movies.insertOne({"name":"exttract",ratings:4})
+{
+  acknowledged: true,
+  insertedId: ObjectId('674c043bddf67167392710bc')
+}
+test> show collections
+movies
+test> db.movies.insertOne.help()
+
+  db.collection.insertOne(document, options):
+
+  Inserts a document into a collection.
+
+  For more information on usage: https://docs.mongodb.com/manual/reference/method/db.collection.insertOne
+test> db.movies.insertMany.help()
+
+  db.collection.insertMany(documents, options):
+
+  Inserts multiple documents into a collection.
+
+  For more information on usage: https://docs.mongodb.com/manual/reference/method/db.collection.insertMany
+test> m1={"name":"johnwick 4",ratings:5}
+{ name: 'johnwick 4', ratings: 5 }
+test>  m2={"name":"Transformers",ratings:3}
+{ name: 'Transformers', ratings: 3 }
+test>  m3={"name":"equaliser",ratings:3}
+{ name: 'equaliser', ratings: 3 }
+test> db.movies.insertMany([m1,m2,m3])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('674c0688ddf67167392710bd'),
+    '1': ObjectId('674c0688ddf67167392710be'),
+    '2': ObjectId('674c0688ddf67167392710bf')
+  }
+}
+test> db.movies
+test.movies
+test> db.movies.find()
+[
+  {
+    _id: ObjectId('674c043bddf67167392710bc'),
+    name: 'exttract',
+    ratings: 4
+  },
+  {
+    _id: ObjectId('674c0688ddf67167392710bd'),
+    name: 'johnwick 4',
+    ratings: 5
+  },
+  {
+    _id: ObjectId('674c0688ddf67167392710be'),
+    name: 'Transformers',
+    ratings: 3
+  },
+  {
+    _id: ObjectId('674c0688ddf67167392710bf'),
+    name: 'equaliser',
+    ratings: 3
+  }
+]
+test> db.movies.find({"name":"equaliser"})
+[
+  {
+    _id: ObjectId('674c0688ddf67167392710bf'),
+    name: 'equaliser',
+    ratings: 3
+  }
+]
+test> db.movies.find({"genre":"fiction"})
+
+test> db.movies.find({"name":"equaliser"},{"name":1})
+[ { _id: ObjectId('674c0688ddf67167392710bf'), name: 'equaliser' } ]
+test> db.movies.find({},{"name":1})
+[
+  { _id: ObjectId('674c043bddf67167392710bc'), name: 'exttract' },
+  { _id: ObjectId('674c0688ddf67167392710bd'), name: 'johnwick 4' },
+  { _id: ObjectId('674c0688ddf67167392710be'), name: 'Transformers' },
+  { _id: ObjectId('674c0688ddf67167392710bf'), name: 'equaliser' }
+]
+test> db.movies.find().limit()
+MongoInvalidArgumentError: Operation "limit" requires an integer
+test> db.movies.find().limit(
+...
+test> db.movies.find().limit
+[Function: limit] {
+  returnType: 'Cursor',
+  serverVersions: [ '0.0.0', '999.999.999' ],
+  apiVersions: [ 0, Infinity ],
+  topologies: [ 'ReplSet', 'Sharded', 'LoadBalanced', 'Standalone' ],
+  returnsPromise: false,
+  deprecated: false,
+  platforms: [ 'Compass', 'Browser', 'CLI' ],
+  isDirectShellCommand: false,
+  acceptsRawInput: false,
+  shellCommandCompleter: undefined,
+  help: [Function (anonymous)] Help
+}
+test> db.movies.find().limit(2)
+[
+  {
+    _id: ObjectId('674c043bddf67167392710bc'),
+    name: 'exttract',
+    ratings: 4
+  },
+  {
+    _id: ObjectId('674c0688ddf67167392710bd'),
+    name: 'johnwick 4',
+    ratings: 5
+  }
+]
+test> db.movies.find({},{"name":1}).sort({"name":1})
+[
+  { _id: ObjectId('674c0688ddf67167392710be'), name: 'Transformers' },
+  { _id: ObjectId('674c0688ddf67167392710bf'), name: 'equaliser' },
+  { _id: ObjectId('674c043bddf67167392710bc'), name: 'exttract' },
+  { _id: ObjectId('674c0688ddf67167392710bd'), name: 'johnwick 4' }
+]
+ db.movies.find({},{"name":1}).sort({"name":-1})
+[
+  { _id: ObjectId('674c0688ddf67167392710bd'), name: 'johnwick 4' },
+  { _id: ObjectId('674c043bddf67167392710bc'), name: 'exttract' },
+  { _id: ObjectId('674c0688ddf67167392710bf'), name: 'equaliser' },
+  { _id: ObjectId('674c0688ddf67167392710be'), name: 'Transformers' }
+]
+ db.movies.find({},{"name":1}).sort({"name":1}).skip(2)
+[
+  { _id: ObjectId('674c043bddf67167392710bc'), name: 'exttract' },
+  {  _id: ObjectId('674c0688ddf67167392710bd'), name: 'johnwick 4' }
+]
+db.movies.find({ratings:{$lt:5}})
+[
+  {
+    _id: ObjectId('674c043bddf67167392710bc'),
+    name: 'exttract',
+    ratings: 4
+  },
+  {
+    _id: ObjectId('674c0688ddf67167392710be'),
+    name: 'Transformers',
+    ratings: 3
+  },
+  {
+    _id: ObjectId('674c0688ddf67167392710bf'),
+    name: 'equaliser',
+    ratings: 3
+  }
+]
+db.movies.find({ratings:{$gt:2}})
+[
+  {
+    _id: ObjectId('674c043bddf67167392710bc'),
+    name: 'exttract',
+    ratings: 4
+  },
+  {
+    _id: ObjectId('674c0688ddf67167392710bd'),
+    name: 'johnwick 4',
+    ratings: 5
+  },
+  {
+    _id: ObjectId('674c0688ddf67167392710be'),
+    name: 'Transformers',
+    ratings: 3
+  },
+  {
+    _id: ObjectId('674c0688ddf67167392710bf'),
+    name: 'equaliser',
+    ratings: 3
+  }
+]
+test> db.movies.updateOne.help()
+
+  db.collection.updateOne(filter, update, options):
+
+  Updates a single document within the collection based on the filter.
+
+  For more information on usage: https://docs.mongodb.com/manual/reference/method/db.collection.updateOne
+test> db.movies.updateOne({"name":"equa;iser"},{$set:{ratings:1}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+test>  db.movies.updateOne({"name":"equaliser"},{$set:{ratings:1}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.movies.updateOne({"name":"equaliser"},{$set:{"name":"madhan_biopic"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.movies.updateMany({ratings:5},{$set:{ratings:2}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.movies.deleteOne({"name":"madhan_biopic"})
+{ acknowledged: true, deletedCount: 1 }
+test>  db.movies.deleteMany({ratings:3})
+{ acknowledged: true, deletedCount: 1 }
+test> m1={"name":"Movie1"}
+{ name: 'Movie1' }
+test> m2={"name":"Movie2"}
+{ name: 'Movie2' }
+test> m3={"name":"Movie3"}
+{ name: 'Movie3' }
+test> m4={"name":"Movie4"}
+{ name: 'Movie4' }
+test> m5={"name":"Movie5"}
+{ name: 'Movie5' }
+test> show collections
+movies
+test> db.movue.insertMany([m1,m2,m3,m4,m5])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('674c0e08ddf67167392710c0'),
+    '1': ObjectId('674c0e08ddf67167392710c1'),
+    '2': ObjectId('674c0e08ddf67167392710c2'),
+    '3': ObjectId('674c0e08ddf67167392710c3'),
+    '4': ObjectId('674c0e08ddf67167392710c4')
+  }
+}
+test>  db.movies.insertMany([m1,m2,m3,m4,m5])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('674c0e24ddf67167392710c5'),
+    '1': ObjectId('674c0e24ddf67167392710c6'),
+    '2': ObjectId('674c0e24ddf67167392710c7'),
+    '3': ObjectId('674c0e24ddf67167392710c8'),
+    '4': ObjectId('674c0e24ddf67167392710c9')
+  }
+}
